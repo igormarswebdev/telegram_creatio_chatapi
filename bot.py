@@ -15,7 +15,6 @@ async def handle_group_message(message: Message):
     print(f"📥 Отримано повідомлення від @{message.from_user.username or message.from_user.id}")
     print(f"➡️   chat.id = {message.chat.id}")
     print(f"➡️   text = {message.text}")
-
     #if message.chat.id in TELEGRAM_GROUPS_TO_ACCOUNT:
         account_id = TELEGRAM_GROUPS_TO_ACCOUNT[message.chat.id]
         author_name = f"{message.from_user.first_name or ''} {message.from_user.last_name or ''}".strip()
