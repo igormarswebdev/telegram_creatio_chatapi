@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_URL = os.getenv("CREATIO_BASE_URL")
+IDENTITY_SERVICE_URL = os.getenv("CREATIO_IDENTITY_SERVICE_URL")
 CLIENT_ID = os.getenv("CREATIO_CLIENT_ID")
 CLIENT_SECRET = os.getenv("CREATIO_CLIENT_SECRET")
 
@@ -17,7 +18,7 @@ async def get_access_token():
         return CREATIO_TOKEN
     async with httpx.AsyncClient() as client:
         resp = await client.post(
-            f"{BASE_URL}/oauth/token",
+            f"{IDENTITY_SERVICE_URL}/connect/token",
             data={
                 "grant_type": "client_credentials",
                 "client_id": CLIENT_ID,
