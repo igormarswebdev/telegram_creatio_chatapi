@@ -1,27 +1,34 @@
-from fastapi import FastAPI
-from bot import bot, setup_bot
-from aiogram import Dispatcher
-from dotenv import load_dotenv
 import os
-import asyncio
+import logging
+from fastapi import FastAPI, Request
+from bot import bot, dp
+from aiogram.types import Update
+from dotenv import load_dotenv
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
-dp: Dispatcher = setup_bot()
+
+WEBHOOK_URL = f"{os.getenv('WEBHOOK_BASE_URL')}/webhook"
 
 @app.on_event("startup")
 async def on_startup():
-    loop = asyncio.get_event_loop()
-    loop.create_task(dp.start_polling(bot))
+    await bot.set_webhook(WEBHOOK_URL)
+    logging.info(f"Webhook встановлено на {WEBHOOK_URL}")
 
-@app.post("/creatio-to-telegram")
-async def send_message(data: dict):
-    from aiogram import Bot
-    t_bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
-    await t_bot.send_message(
-        chat_id=data["group_id"],
-        text=f"👨‍💼 *{data['operator_name']}*: {data['text']}",
-        parse_mode="Markdown"
-    )
-    return {"status": "sent"}
+@app.on_event("shutdown")
+async def on_shutdown():
+    await bot.delete_webhook()
+    logging.info("Webhook видалено")
+
+@app.post("/webhook")
+async def telegram_webhook(request: Request):
+    data = await request.json()
+    update = Update(**data)
+    await dp.feed_update(bot, update)
+    return {"ok": True}
+
+@app.get("/")
+async def health_check():
+    return {"status": "ok"}
