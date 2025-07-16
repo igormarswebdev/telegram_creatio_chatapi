@@ -16,7 +16,7 @@ async def handle_group_message(message: Message):
     print(f"➡️   chat.id = {message.chat.id}")
     print(f"➡️   text = {message.text}")
 
-    if message.chat.id in TELEGRAM_GROUPS_TO_ACCOUNT:
+    #if message.chat.id in TELEGRAM_GROUPS_TO_ACCOUNT:
         account_id = TELEGRAM_GROUPS_TO_ACCOUNT[message.chat.id]
         author_name = f"{message.from_user.first_name or ''} {message.from_user.last_name or ''}".strip()
         text = message.text
@@ -36,5 +36,5 @@ async def handle_group_message(message: Message):
         except Exception as e:
             print(f"❌ Помилка при відправці в Creatio: {e}")
             await message.reply("⚠️ Сталася помилка при передачі в Creatio.")
-    else:
-        print("⚠️ Повідомлення з групи, яка не пов’язана з Creatio")
+    #else:
+        #print("⚠️ Повідомлення з групи, яка не пов’язана з Creatio")
