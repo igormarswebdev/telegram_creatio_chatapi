@@ -21,6 +21,3 @@ async def handle_group_message(message: Message):
         await post_message(chat_id, author_name, text)
 
         await message.reply("✅ Повідомлення передано в Creatio")
-
-def setup_bot():
-    return dp
