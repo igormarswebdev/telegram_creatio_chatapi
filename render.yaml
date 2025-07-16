@@ -1,19 +1,17 @@
 services:
   - type: web
-    name: creatio-telegram-bridge
+    name: telegram-creatio-bot
     env: python
-    plan: free
-    branch: main
-    buildCommand: |
-      pip install -r requirements.txt
-    startCommand: |
-      uvicorn main:app --host 0.0.0.0 --port 10000
+    region: frankfurt
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port 10000"
     envVars:
       - key: TELEGRAM_BOT_TOKEN
-        value: YOUR_TELEGRAM_BOT_TOKEN
+        value: твій_бот_токен
       - key: CREATIO_BASE_URL
-        value: https://your_creatio_site/0/rest
-      - key: CREATIO_USERNAME
-        value: Supervisor
-      - key: CREATIO_PASSWORD
-        value: MyPassword123
+        value: https://knajpapro.creatio.com/0
+      - key: CREATIO_CLIENT_ID
+        value: твій_client_id
+      - key: CREATIO_CLIENT_SECRET
+        value: твій_client_secret
+    plan: free
