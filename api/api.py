@@ -20,8 +20,16 @@ chat_store = {}
 class TelegramMessage(BaseModel):
     chat_id: int
     text: str
-
+      
 async def get_creatio_token():
+    print("URL:", f"{CREATIO_URL}connect/token")
+    print("DATA:", {
+        "grant_type": "password",
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "username": USERNAME,
+        "password": PASSWORD
+    })
     async with aiohttp.ClientSession() as session:
         async with session.post(
             f"{CREATIO_URL}connect/token",
@@ -34,8 +42,14 @@ async def get_creatio_token():
             },
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         ) as resp:
-            data = await resp.json()
-            return data.get("access_token")
+            text = await resp.text()
+            print("DEBUG RESPONSE TEXT:", text)
+            try:
+                data = await resp.json()
+                return data.get("access_token")
+            except Exception as e:
+                print("ERROR parsing JSON:", e)
+                return None
 
 async def create_chat(token, telegram_chat_id):
     async with aiohttp.ClientSession() as session:
