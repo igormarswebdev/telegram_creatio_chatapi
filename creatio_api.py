@@ -65,7 +65,7 @@ async def find_account_by_telegram_chat(telegram_chat_id: int):
     token = await get_access_token()
 
     query_url = (
-        f"{BASE_URL}/odata/AccountCollection"
+        f"{BASE_URL}/odata/Account"
         f"?$filter=QSTelegramChatId eq {telegram_chat_id}"
         f"&$select=Id,Name"
     )
