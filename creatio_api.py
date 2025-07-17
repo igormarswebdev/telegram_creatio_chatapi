@@ -60,3 +60,27 @@ async def post_message(chat_id, author_name, text):
         )
         r.raise_for_status()
         return r.json()
+
+async def find_account_by_telegram_chat(telegram_chat_id: int):
+    token = await get_access_token()
+
+    query_url = (
+        f"{BASE_URL}/0/odata/AccountCollection"
+        f"?$filter=UsrTelegramChatId eq {telegram_chat_id}"
+        f"&$select=Id,Name"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json"
+    }
+
+    async with httpx.AsyncClient() as client:
+        r = await client.get(query_url, headers=headers)
+        r.raise_for_status()
+        data = r.json()
+
+        accounts = data.get("value", [])
+        if accounts:
+            return accounts[0]["Id"]
+        return None
