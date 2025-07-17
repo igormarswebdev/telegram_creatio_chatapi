@@ -66,7 +66,7 @@ async def find_account_by_telegram_chat(telegram_chat_id: int):
 
     query_url = (
         f"{BASE_URL}/odata/AccountCollection"
-        f"?$filter=UsrTelegramChatId eq {telegram_chat_id}"
+        f"?$filter=TelegramChatId eq {telegram_chat_id}"
         f"&$select=Id,Name"
     )
 
